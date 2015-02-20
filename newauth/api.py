@@ -3,13 +3,13 @@
 """
 Alex Gaynor will kill me
 """
+import hashlib
 
 from django.db import models
-from django.utils.encoding import smart_str, StrAndUnicode
+from django.utils.encoding import smart_str
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.functional import memoize
 from django.utils.translation import ugettext_lazy as _
-from django.utils.hashcompat import md5_constructor, sha_constructor
 from django.conf import settings
 
 from newauth.constants import (
@@ -34,6 +34,7 @@ __all__ = (
     'get_user_from_request',
     'get_user',
 )
+
 
 class UserBase(models.Model):
     """
@@ -88,7 +89,8 @@ class UserBase(models.Model):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-class AnonymousUserBase(StrAndUnicode):
+
+class AnonymousUserBase(object):
     """
     A simple anonymous user.
     """
@@ -124,10 +126,12 @@ class AnonymousUserBase(StrAndUnicode):
     def __unicode__(self):
         return self.get_display_name()
 
+
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
 # md5, sha1, crypt
 PASSWORD_ALGO = getattr(settings, 'NEWAUTH_PASSWORD_ALGO', DEFAULT_PASSWORD_ALGO)
+
 
 def get_hexdigest(algorithm, salt, raw_password):
     """
@@ -142,11 +146,12 @@ def get_hexdigest(algorithm, salt, raw_password):
             raise ValueError('"crypt" password algorithm not supported in this environment')
         return crypt.crypt(raw_password, salt)
 
-    if algorithm == 'md5':
-        return md5_constructor(salt + raw_password).hexdigest()
-    elif algorithm == 'sha1':
-        return sha_constructor(salt + raw_password).hexdigest()
-    raise ValueError("Got unknown password algorithm type in password.")
+    try:
+        hash_method = getattr(hashlib, algorithm)
+        return hash_method(salt+raw_password).hexdigest()
+    except AttributeError:
+        raise ValueError("Got unknown password algorithm type in password.")
+
 
 def check_password(raw_password, enc_password):
     """
@@ -155,6 +160,7 @@ def check_password(raw_password, enc_password):
     """
     algo, salt, hsh = enc_password.split('$')
     return hsh == get_hexdigest(algo, salt, raw_password)
+
 
 class BasicUserManager(models.Manager):
     """
