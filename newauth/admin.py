@@ -122,7 +122,11 @@ class BasicUserAdmin(UserBaseAdmin):
         return super(BasicUserAdmin, self).get_form(request, obj, **defaults)
 
     def get_urls(self):
-        from django.conf.urls.defaults import patterns
+        try:
+            from django.conf.urls.defaults import patterns
+        except ImportError:
+            from django.conf.urls import patterns
+
         return patterns('',
             (r'^(.+)/password/$', self.admin_site.admin_view(self.user_change_password))
         ) + super(BasicUserAdmin, self).get_urls()
