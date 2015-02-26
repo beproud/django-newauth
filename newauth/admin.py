@@ -1,7 +1,6 @@
 #:coding=utf-8:
 
 from django import forms
-from django.db import transaction
 from django.conf import settings
 from django.contrib import admin
 from django.http import Http404
@@ -17,6 +16,11 @@ from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.template import RequestContext
+
+try:
+    from django.db.transaction import atomic
+except ImportError:
+    from django.db.transaction import commit_on_success as atomic
 
 csrf_protect_m = method_decorator(csrf_protect)
 
@@ -132,7 +136,7 @@ class BasicUserAdmin(UserBaseAdmin):
         ) + super(BasicUserAdmin, self).get_urls()
 
     @csrf_protect_m
-    @transaction.commit_on_success
+    @atomic
     def add_view(self, request, form_url='', extra_context=None):
         # It's an error for a user to have add permission but NOT change
         # permission for users. If we allowed such users to add users, they
