@@ -181,8 +181,8 @@ class BasicUserBase(UserBase):
     This class can be subclassed when using
     a simple username password auth system.
     """
-    username = models.CharField(_('username'), max_length=30, unique=True, help_text=_("Required. 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"))
-    password = models.CharField(_('password'), max_length=128, help_text=_("Use '[algo]$[salt]$[hexdigest]' or use the <a href=\"password/\">change password form</a>."))
+    username = models.CharField(_('username'), max_length=30, unique=True, help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."))
+    password = models.CharField(_('password'), max_length=128)
 
     objects = BasicUserManager()
 

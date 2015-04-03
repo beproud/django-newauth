@@ -59,11 +59,11 @@ class BasicAuthForm(BaseAuthForm):
     subclasses of BasicUser.
     """
     default_error_messages = {
-        'auth_failure': _("Please enter a correct username and password. Note that both fields are case-sensitive."),
+        'auth_failure': _("Please enter a correct %(username)s and password. Note that both fields may be case-sensitive."),
     }
 
-    username = forms.CharField(label=_("Username"), max_length=30)
-    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
+    username = forms.CharField(label=_("username"), max_length=30)
+    password = forms.CharField(label=_("password"), widget=forms.PasswordInput)
 
     def get_credentials(self):
         return {

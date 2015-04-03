@@ -31,6 +31,7 @@ def login(request, next_page=None,
                 from django.forms.forms import NON_FIELD_ERRORS
                 # Add an error to the form causing it to invalidate.
                 form._errors[NON_FIELD_ERRORS] = form.error_class([_("Your Web browser doesn't appear to have cookies enabled. Cookies are required for logging in.")])
+                # memo: this feature is removed on Django: https://github.com/django/django/pull/644
             else:
                 # Light security check -- make sure redirect_to isn't garbage.
                 if not redirect_to or ' ' in redirect_to:
