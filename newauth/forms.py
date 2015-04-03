@@ -37,7 +37,11 @@ class BaseAuthForm(forms.Form):
         if credentials:
             self.user_cache = authenticate(**credentials)
             if self.user_cache is None:
-                raise forms.ValidationError(self.default_error_messages['auth_failure'])
+                raise forms.ValidationError(
+                    self.default_error_messages['auth_failure'],
+                    code='auth_failure',
+                    params={'username': _("username")},
+                )
         return self.cleaned_data
 
     def get_user_id(self):
