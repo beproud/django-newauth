@@ -2,10 +2,10 @@
 #:coding=utf-8:
 
 from setuptools import setup, find_packages
- 
+
 setup (
     name='django-newauth',
-    version='0.31-post1',
+    version='0.31-post2',
     description='Authentication for Django done right',
     author='Ian Lewis',
     author_email='ianmlewis@gmail.com',
