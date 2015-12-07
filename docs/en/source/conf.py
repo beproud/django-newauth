@@ -176,7 +176,7 @@ htmlhelp_basename = 'newauthdoc'
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
   ('index', 'django-newauth.tex', ur'django-newauth Documentation',
-   u'Ian Lewis', 'manual'),
+   u'BeProud', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -213,7 +213,7 @@ latex_documents = [
 # regardless of the global pdf_compressed setting.
 
 pdf_documents = [
-  ('index', u'django-newauth-Documentation', u'django-newauth Documentation', u'Ian Lewis'),
+  ('index', u'django-newauth-Documentation', u'django-newauth Documentation', u'BeProud'),
 ]
 
 # A comma-separated list of custom stylesheets. Example:

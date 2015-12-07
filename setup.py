@@ -7,9 +7,9 @@ setup (
     name='django-newauth',
     version='0.31-post3',
     description='Authentication for Django done right',
-    author='Ian Lewis',
-    author_email='ianmlewis@gmail.com',
-    url='https://bitbucket.org/IanLewis/django-newauth/',
+    author='BeProud',
+    author_email='project@beproud.jp',
+    url='https://github.com/beproud/django-newauth/',
     classifiers=[
       'Development Status :: 3 - Alpha',
       'Environment :: Plugins',
