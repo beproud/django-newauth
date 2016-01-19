@@ -8,7 +8,6 @@ from django.shortcuts import redirect
 from django.utils.html import escape
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
-from django.contrib.admin.util import flatten_fieldsets
 from django.contrib.admin.helpers import AdminForm
 from django.forms.models import modelform_factory
 from django.utils.translation import ugettext_lazy as _
@@ -17,10 +16,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.template import RequestContext
 
-try:
-    from django.db.transaction import atomic
-except ImportError:
-    from django.db.transaction import commit_on_success as atomic
+from newauth.compat import flatten_fieldsets, atomic
+
 
 csrf_protect_m = method_decorator(csrf_protect)
 

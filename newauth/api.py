@@ -8,7 +8,6 @@ import hashlib
 from django.db import models
 from django.utils.encoding import smart_str
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.functional import memoize
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
@@ -18,6 +17,7 @@ from newauth.constants import (
     DEFAULT_USER_PROPERTY,
     DEFAULT_PASSWORD_ALGO,
 )
+from newauth.compat import memoize
 
 __all__ = (
     'UserBase',

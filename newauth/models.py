@@ -1,9 +1,9 @@
 #:coding=utf-8:
 
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.functional import memoize
 
 from newauth.api import _get_backend_data
+from newauth.compat import memoize
 
 __all__ = (
     'User',
