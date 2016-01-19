@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup (
     name='django-newauth',
-    version='0.31-post3',
+    version='0.32',
     description='Authentication for Django done right',
     author='BeProud',
     author_email='project@beproud.jp',
