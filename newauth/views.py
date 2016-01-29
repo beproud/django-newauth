@@ -21,9 +21,8 @@ def login(request, next_page=None,
           authentication_form=BasicAuthForm):
     """Displays the login form and handles the login action."""
 
-    redirect_to = request.REQUEST.get(redirect_field_name, '')
-    
     if request.method == "POST":
+        redirect_to = request.POST.get(redirect_field_name, '')
         form = authentication_form(data=request.POST)
 
         if form.is_valid():
@@ -53,6 +52,7 @@ def login(request, next_page=None,
                 return redirect(redirect_to)
 
     else:
+        redirect_to = request.GET.get(redirect_field_name, '')
         form = authentication_form()
 
     if hasattr(request, 'session'):
