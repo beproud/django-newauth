@@ -116,7 +116,7 @@ class BasicUserAdmin(UserBaseAdmin):
         defaults = {}
         if obj is None:
             defaults.update({
-                'form': modelform_factory(self.model, self.add_form),
+                'form': modelform_factory(self.model, self.add_form, fields='__all__'),
                 'fields': flatten_fieldsets(self.add_fieldsets),
             })
         defaults.update(kwargs)
