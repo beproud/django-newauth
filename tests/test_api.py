@@ -4,12 +4,15 @@ from django.http import HttpRequest
 from django.test import TestCase as DjangoTestCase
 from django.conf import settings
 from django.contrib.sessions.middleware import SessionMiddleware
+import pytest
 
 from newauth.api import authenticate, get_user, login, logout, BasicAnonymousUser
 from newauth.middleware import AuthMiddleware
-from newauth.tests.base import BaseTestCase
 from newauth.constants import DEFAULT_SESSION_KEY
+from base import BaseTestCase
 
+
+@pytest.mark.django_db
 class AuthTestCase(BaseTestCase, DjangoTestCase):
     fixtures = ['authutils_testdata.json']
 
@@ -62,8 +65,8 @@ class AuthTestCase(BaseTestCase, DjangoTestCase):
         self.assertTrue(user.is_anonymous(), "%s is not anonymous" % user)
 
     def test_get_user_with_backend(self):
-        from newauth.tests.testapp.models import TestUser
-        from newauth.tests.testapp.models import TestUser3
+        from testapp.models import TestUser
+        from testapp.models import TestUser3
 
         user = get_user(1, 'testapp2')
         self.assertTrue(user, "Could not get User 1")
@@ -81,7 +84,7 @@ class AuthTestCase(BaseTestCase, DjangoTestCase):
         self.assertTrue(isinstance(user, TestUser3))
 
     def test_get_user_with_backend_failure(self):
-        from newauth.tests.testapp.models import TestAnonymousUser3
+        from testapp.models import TestAnonymousUser3
 
         user = get_user(3, 'testapp')
         self.assertTrue(user.is_anonymous(), "%s is not anonymous" % user)
@@ -115,7 +118,7 @@ class LogoutTestCase(BaseTestCase, DjangoTestCase):
         Test to make sure that logout() works when
         the user is logged in.
         """
-        from newauth.tests.testapp.models import TestUser3, TestAnonymousUser3
+        from testapp.models import TestUser3, TestAnonymousUser3
         
         request = HttpRequest()
         user = authenticate(user_id=1, _backend_name='testapp3')

@@ -1,10 +1,13 @@
 #:coding=utf-8:
 
+import pytest
 from django.test import TestCase as DjangoTestCase
 
-from newauth.tests.base import BaseTestCase
 from newauth.test import AuthTestCaseMixin
+from base import BaseTestCase
 
+
+@pytest.mark.django_db
 class AuthTestCaseMixinTest(BaseTestCase, AuthTestCaseMixin, DjangoTestCase):
     fixtures = ['authutils_testdata.json']
 

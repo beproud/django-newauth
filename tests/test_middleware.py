@@ -1,13 +1,15 @@
 #:coding=utf-8:
 
+import pytest
 from django.test import TestCase as DjangoTestCase
-
 from django import http
 from django.contrib.sessions.middleware import SessionMiddleware
 
 from newauth.constants import DEFAULT_USER_PROPERTY
 from newauth.middleware import AuthMiddleware
 
+
+@pytest.mark.django_db
 class MiddlewareTest(DjangoTestCase):
     fixtures = ['authutils_testdata.json']
 

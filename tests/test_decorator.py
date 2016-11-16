@@ -2,6 +2,7 @@
 
 import urlparse
 
+import pytest
 from django.test import TestCase as DjangoTestCase
 from django.conf import settings
 
@@ -9,6 +10,8 @@ __all__ = (
     'DecoratorTest',
 )
 
+
+@pytest.mark.django_db
 class DecoratorTest(DjangoTestCase):
     fixtures = ['authutils_testdata.json']
 
