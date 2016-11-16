@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -22,6 +23,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'newauth.middleware.AuthMiddleware',
 )
+TEMPLATES=[{
+    'DIRS': [os.path.join(os.path.dirname(__file__), 'templates')],
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+}]
 NEWAUTH_BACKENDS = {
     'default': {
         'backend': 'newauth.backend.BasicUserBackend',

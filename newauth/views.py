@@ -2,9 +2,8 @@
 
 import re
 
-from django.template import RequestContext
 from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.shortcuts import redirect, render_to_response
+from django.shortcuts import redirect, render
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.cache import never_cache
@@ -58,10 +57,10 @@ def login(request, next_page=None,
     if hasattr(request, 'session'):
         request.session.set_test_cookie()
     
-    return render_to_response(template_name, {
+    return render(request, template_name, context={
         'form': form,
         redirect_field_name: redirect_to,
-    }, context_instance=RequestContext(request))
+    })
 
 def logout(request, next_page=None, template_name='registration/logged_out.html', redirect_field_name=REDIRECT_FIELD_NAME):
     "Logs out the user and displays 'You are logged out' message."
@@ -71,9 +70,9 @@ def logout(request, next_page=None, template_name='registration/logged_out.html'
         if redirect_to:
             return redirect(redirect_to)
         else:
-            return render_to_response(template_name, {
+            return render(request, template_name, context={
                 'title': _('Logged out')
-            }, context_instance=RequestContext(request))
+            })
     else:
         # Redirect to this page until the session has been cleared.
         return redirect(next_page or request.path)
