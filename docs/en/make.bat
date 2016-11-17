@@ -7,7 +7,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=p
+set SPHINXPROJ=django-newauth
 
 if "%1" == "" goto help
 
