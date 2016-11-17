@@ -1,3 +1,6 @@
+from importlib import import_module
+
+
 class AuthTestCaseMixin(object):
     """
     from django.test import TestCase
@@ -18,7 +21,6 @@ class AuthTestCaseMixin(object):
         """
         from django.http import HttpRequest
         from django.conf import settings
-        from django.utils.importlib import import_module
         from django.contrib.sessions.middleware import SessionMiddleware
         from newauth.middleware import AuthMiddleware
         from newauth.api import authenticate, login

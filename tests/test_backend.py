@@ -1,16 +1,19 @@
 #:coding=utf-8:
 
+import pytest
 from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase as DjangoTestCase
 
-from newauth.tests.base import BaseTestCase
 from newauth.api import load_backends, get_backends
+from base import BaseTestCase
 
+
+@pytest.mark.django_db
 class BackendTestCase(BaseTestCase, DjangoTestCase):
     fixtures = ["authutils_testdata.json"]
     
     def test_load_backend(self):
-        from newauth.tests.testapp.backends import TestBackend, TestBackend3
+        from testapp.backends import TestBackend, TestBackend3
 
         backends = load_backends("testapp")
 
@@ -27,7 +30,7 @@ class BackendTestCase(BaseTestCase, DjangoTestCase):
 
     def test_get_backends(self):
         from newauth.backend import BasicUserBackend
-        from newauth.tests.testapp.backends import TestBackend, TestBackend2, TestBackend3
+        from testapp.backends import TestBackend, TestBackend2, TestBackend3
 
         backends = zip(*get_backends())
         
