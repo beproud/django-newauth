@@ -46,16 +46,17 @@ by default but we can tell it to use the
 
 .. code-block:: python
 
-    from django.conf.urls.defaults import *
+    from django.conf.urls import url
     from django.conf import settings
 
+    from newauth.views import login
     from newauth.forms import BasicAuthForm
 
-    urlpatterns = patterns('newauth.views',
-        url(r'^login$', 'login', name='newauth_login', kwargs={
+    urlpatterns = [
+        url(r'^login$', login, name='newauth_login', kwargs={
             'authentication_form': BasicAuthForm,
         }),
-    )
+    ]
 
 We can also use the provided :class:`BasicUserAdmin <newauth.admin.BasicUserAdmin>`
 to add functionality to Django's admin. The :class:`BasicUserAdmin <newauth.admin.BasicUserAdmin>`
