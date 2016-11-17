@@ -11,13 +11,15 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
-from django.conf import global_settings as settings
-from django.core.management import setup_environ
-setup_environ(settings)
+import os
+import sys
+import django
+from django.conf import settings
 
-sys.path.append(os.path.abspath('.'))
 sys.path.append(os.path.abspath('../../../'))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'django.conf.global_settings'
+settings.configure(SECURITY_KEY='<key>')
+django.setup()
 
 # General configuration
 # ---------------------
