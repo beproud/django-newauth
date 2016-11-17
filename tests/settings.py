@@ -32,6 +32,24 @@ NEWAUTH_BACKENDS = {
         'backend': 'newauth.backend.BasicUserBackend',
         'user': 'testapp.models.TestBasicUser',
         'anon_user': 'newauth.api.BasicAnonymousUser',
+    },
+    'testapp': {
+        'backend': (
+            'testapp.backends.TestBackend',
+            'testapp.backends.TestBackend3',
+        ),
+        'user': 'testapp.models.TestUser',
+        'anon_user': 'newauth.api.BasicAnonymousUser',
+    },
+    'testapp2': {
+        'backend': 'testapp.backends.TestBackend2',
+        'user': 'testapp.models.TestUser',
+        'anon_user': 'newauth.api.BasicAnonymousUser',
+    },
+    'testapp3': {
+        'backend': 'testapp.backends.TestBackend3',
+        'user': 'testapp.models.TestUser3',
+        'anon_user': 'testapp.models.TestAnonymousUser3',
     }
 }
 SECRET_KEY = '<key>'

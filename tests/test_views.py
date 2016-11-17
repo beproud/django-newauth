@@ -7,12 +7,11 @@ from django.test import TestCase as DjangoTestCase
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.conf import settings
 
-from base import BaseTestCase
 from testapp.models import TestBasicUser
 
 
 @pytest.mark.django_db
-class ViewsTest(BaseTestCase, DjangoTestCase):
+class ViewsTest(DjangoTestCase):
     fixtures = ['authutils_testdata.json']
 
     def setUp(self):

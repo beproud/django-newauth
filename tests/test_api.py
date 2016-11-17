@@ -9,11 +9,10 @@ import pytest
 from newauth.api import authenticate, get_user, login, logout, BasicAnonymousUser
 from newauth.middleware import AuthMiddleware
 from newauth.constants import DEFAULT_SESSION_KEY
-from base import BaseTestCase
 
 
 @pytest.mark.django_db
-class AuthTestCase(BaseTestCase, DjangoTestCase):
+class AuthTestCase(DjangoTestCase):
     fixtures = ['authutils_testdata.json']
 
     def test_authenticate_success(self):
@@ -110,7 +109,7 @@ class AuthTestCase(BaseTestCase, DjangoTestCase):
         """
         self.assertNumQueries(0, get_user, None, None)
 
-class LogoutTestCase(BaseTestCase, DjangoTestCase):
+class LogoutTestCase(DjangoTestCase):
     fixtures = ['authutils_testdata.json']
 
     def test_logout_when_logged_in(self):

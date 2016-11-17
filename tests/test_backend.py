@@ -5,11 +5,10 @@ from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase as DjangoTestCase
 
 from newauth.api import load_backends, get_backends
-from base import BaseTestCase
 
 
 @pytest.mark.django_db
-class BackendTestCase(BaseTestCase, DjangoTestCase):
+class BackendTestCase(DjangoTestCase):
     fixtures = ["authutils_testdata.json"]
     
     def test_load_backend(self):
