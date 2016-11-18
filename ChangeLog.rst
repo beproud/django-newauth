@@ -12,6 +12,10 @@ Release 0.34 (Unreleased)
 Release 0.33 (2016-02-01)
 =========================
 
-- Support Django-1.9
+- More support Django-1.8 & 1.9
 
+Release 0.32 (2016-01-19)
+=========================
+
+- Support Django-1.8 & 1.9
 
