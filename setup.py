@@ -2,6 +2,7 @@
 #:coding=utf-8:
 
 from setuptools import setup, find_packages
+from newauth import VERSION
 
 
 def read(filename):
@@ -11,7 +12,7 @@ def read(filename):
 
 setup (
     name='django-newauth',
-    version='0.35',
+    version=VERSION,
     description='Authentication for Django done right',
     long_description=read('README.rst') + read('ChangeLog.rst'),
     author='BeProud',
