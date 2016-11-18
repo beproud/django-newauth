@@ -2,6 +2,7 @@
 
 from django import forms
 from django.conf import settings
+from django.conf.urls import url
 from django.contrib import admin
 from django.http import Http404
 from django.shortcuts import redirect
@@ -9,14 +10,14 @@ from django.utils.html import escape
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.contrib.admin.helpers import AdminForm
+from django.contrib.admin.utils import flatten_fieldsets
 from django.forms.models import modelform_factory
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.template import RequestContext
-
-from newauth.compat import flatten_fieldsets, atomic
+from django.db.transaction import atomic
 
 
 csrf_protect_m = method_decorator(csrf_protect)
@@ -123,14 +124,9 @@ class BasicUserAdmin(UserBaseAdmin):
         return super(BasicUserAdmin, self).get_form(request, obj, **defaults)
 
     def get_urls(self):
-        try:
-            from django.conf.urls.defaults import patterns
-        except ImportError:
-            from django.conf.urls import patterns
-
-        return patterns('',
-            (r'^(.+)/password/$', self.admin_site.admin_view(self.user_change_password))
-        ) + super(BasicUserAdmin, self).get_urls()
+        return [
+            url(r'^(.+)/password/$', self.admin_site.admin_view(self.user_change_password))
+        ] + super(BasicUserAdmin, self).get_urls()
 
     @csrf_protect_m
     @atomic

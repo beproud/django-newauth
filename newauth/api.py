@@ -7,6 +7,7 @@ import hashlib
 
 from django.db import models
 from django.utils.encoding import smart_str
+from django.utils.lru_cache import lru_cache
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
@@ -17,7 +18,6 @@ from newauth.constants import (
     DEFAULT_USER_PROPERTY,
     DEFAULT_PASSWORD_ALGO,
 )
-from newauth.compat import memoize
 
 __all__ = (
     'UserBase',
@@ -276,7 +276,8 @@ def import_string(import_name, silent=False):
         if not silent:
             raise
 
-_auth_backend_cache = {}
+
+@lru_cache()
 def load_backends(backend_name):
     """
     Load the auth backend with the given name
@@ -295,7 +296,7 @@ def load_backends(backend_name):
             raise ImproperlyConfigured('Error importing authentication backends. Is NEWAUTH_BACKENDS a correctly defined dict?')
         backends.append(cls(backend_name))
     return backends
-load_backends = memoize(load_backends, _auth_backend_cache, 1)
+
 
 def get_backends(backend_names=None):
     """

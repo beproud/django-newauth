@@ -4,11 +4,10 @@ import pytest
 from django.test import TestCase as DjangoTestCase
 
 from newauth.test import AuthTestCaseMixin
-from base import BaseTestCase
 
 
 @pytest.mark.django_db
-class AuthTestCaseMixinTest(BaseTestCase, AuthTestCaseMixin, DjangoTestCase):
+class AuthTestCaseMixinTest(AuthTestCaseMixin, DjangoTestCase):
     fixtures = ['authutils_testdata.json']
 
     def test_auth_login(self):

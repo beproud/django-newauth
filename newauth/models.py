@@ -1,9 +1,9 @@
 #:coding=utf-8:
 
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.lru_cache import lru_cache
 
 from newauth.api import _get_backend_data
-from newauth.compat import memoize
 
 __all__ = (
     'User',
@@ -12,7 +12,8 @@ __all__ = (
     'get_anonymous_user_model',
 )
 
-_user_model_cache = {}
+
+@lru_cache()
 def _get_user_models(model_name=None):
     from newauth.api import import_string
 
@@ -44,7 +45,7 @@ def _get_user_models(model_name=None):
     except AttributeError:
         raise ImproperlyConfigured('Module does not define a class "%s"' % anon_model_path)
     return UserCls, AnonUserCls
-_get_user_models = memoize(_get_user_models, _user_model_cache, 1)
+
 
 def get_user_model(model_name=None):
     """

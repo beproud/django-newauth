@@ -13,11 +13,11 @@ including the ``newauth.urls`` module.
 
 .. code-block:: python
 
-    urlpatterns = patterns('',
+    urlpatterns = [
         # ...
         url(r'^account/', include('newauth.urls')),
         # ...
-    )
+    ]
 
 Customizing the login form
 --------------------------------
@@ -29,13 +29,13 @@ argument to the :func:`login <newauth.views.login` view.
 
 .. code-block:: python
 
-    urlpatterns = patterns('',
+    urlpatterns = [
         # ...
         url(r'^login/$', 'newauth.views.login', name='newauth_login', kwargs={
             'authentication_form': MyLoginForm,
         }),
         # ...
-    )
+    ]
 
 In :doc:`the next section <views>` we'll discuss how to limit access to views
 to logged-in users.
