@@ -1,2 +1,3 @@
 recursive-include newauth/templates *
-recursive-include newauth/fixtures *
+include ChangeLog.rst
+include requirements-doc.txt
