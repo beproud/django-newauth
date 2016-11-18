@@ -3,21 +3,29 @@
 
 from setuptools import setup, find_packages
 
+
+def read(filename):
+    with open(filename) as f:
+        return f.read()
+
+
 setup (
     name='django-newauth',
     version='0.35',
     description='Authentication for Django done right',
+    long_description=read('README.rst') + read('ChangeLog.rst'),
     author='BeProud',
     author_email='project@beproud.jp',
-    url='https://github.com/beproud/django-newauth/',
+    url='http://django-newauth.rtfd.io/',
     classifiers=[
-      'Development Status :: 3 - Alpha',
-      'Environment :: Plugins',
-      'Framework :: Django',
-      'Intended Audience :: Developers',
-      'License :: OSI Approved :: BSD License',
-      'Programming Language :: Python',
-      'Topic :: Software Development :: Libraries :: Python Modules',
+        'Development Status :: 3 - Alpha',
+        'Environment :: Plugins',
+        'Framework :: Django',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: BSD License',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     include_package_data=True,
     packages=find_packages(),
