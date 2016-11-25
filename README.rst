@@ -16,3 +16,8 @@ Links
 - `Documentation <http://django-newauth.rtfd.io/>`__
 - `Repository <https://github.com/beproud/django-newauth/>`__
 
+LICENSE
+=======
+
+BSD License.
+
