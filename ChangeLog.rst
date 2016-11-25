@@ -2,7 +2,7 @@
 ChangeLog
 =========
 
-Release 0.34 (Unreleased)
+Release 0.34 (2016-11-25)
 =========================
 
 - Support Django-1.10
