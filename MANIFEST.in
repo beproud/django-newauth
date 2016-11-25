@@ -1,3 +1,2 @@
 recursive-include newauth/templates *
 include ChangeLog.rst
-include requirements-doc.txt

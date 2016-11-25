@@ -12,6 +12,7 @@ Run tests using tox::
 Links
 =====
 
+- `PyPI <https://pypi.python.org/pypi/django-newauth>`__
 - `Documentation <http://django-newauth.rtfd.io/>`__
 - `Repository <https://github.com/beproud/django-newauth/>`__
 
