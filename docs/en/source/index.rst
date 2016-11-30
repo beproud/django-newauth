@@ -47,6 +47,7 @@ Table of contents:
   third_party
   reference/index
   settings
+  changes
 
 Indices and tables
 ==================
