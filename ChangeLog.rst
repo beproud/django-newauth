@@ -2,7 +2,7 @@
 ChangeLog
 =========
 
-Uneleased 0.35
+Release 0.35 (2016-11-30)
 =========================
 
 - 'newauth.middleware.AuthMiddleware' supports ``settings.MIDDLEWARE`` since django-1.10
