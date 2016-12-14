@@ -5,6 +5,8 @@ ChangeLog
 Unrelease 0.36
 ==============
 
+- Fixed: issue #7 Exception Type: AttributeError at /logout/
+
 
 Release 0.35 (2016-11-30)
 =========================
