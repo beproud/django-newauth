@@ -66,7 +66,10 @@ def logout(request, next_page=None, template_name='registration/logged_out.html'
     "Logs out the user and displays 'You are logged out' message."
     auth_logout(request)
     if next_page is None:
-        redirect_to = request.REQUEST.get(redirect_field_name, getattr(settings, 'LOGOUT_REDIRECT_URL', ''))
+        if request.method == "POST":
+            redirect_to = request.POST.get(redirect_field_name, getattr(settings, 'LOGOUT_REDIRECT_URL', ''))
+        else:
+            redirect_to = request.GET.get(redirect_field_name, getattr(settings, 'LOGOUT_REDIRECT_URL', ''))
         if redirect_to:
             return redirect(redirect_to)
         else:
