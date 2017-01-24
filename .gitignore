@@ -9,8 +9,10 @@
 *.swp
 *.swo
 *.egg-info
+.tox
+.cache
 build
 dist
 pip-log.txt
-docs/*/build
+docs/*/_build
 
