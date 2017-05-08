@@ -5,9 +5,11 @@ Alex Gaynor will kill me
 """
 import hashlib
 
+from six import iteritems, string_types
 from django.db import models
 from django.utils.encoding import smart_str
 from django.utils.lru_cache import lru_cache
+from django.utils.module_loading import import_string
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
@@ -148,7 +150,7 @@ def get_hexdigest(algorithm, salt, raw_password):
 
     try:
         hash_method = getattr(hashlib, algorithm)
-        return hash_method(salt+raw_password).hexdigest()
+        return hash_method((salt+raw_password).encode()).hexdigest()
     except AttributeError:
         raise ValueError("Got unknown password algorithm type in password.")
 
@@ -236,45 +238,13 @@ def _get_backend_data():
     from django.conf import settings
 
     backend_data = getattr(settings, 'NEWAUTH_BACKENDS', DEFAULT_USER_BACKENDS)
-    for key, given_data in backend_data.iteritems():
+    for key, given_data in iteritems(backend_data):
         data = DEFAULT_USER_BACKENDS['default'].copy() 
-        if isinstance(given_data['backend'], basestring):
+        if isinstance(given_data['backend'], string_types):
             given_data['backend'] = (given_data['backend'],)
         data.update(given_data)
         backend_data[key] = data
     return backend_data
-
-def import_string(import_name, silent=False):
-    """Imports an object based on a string.  This is useful if you want to
-    use import paths as endpoints or something similar.  An import path can
-    be specified either in dotted notation (``xml.sax.saxutils.escape``)
-    or with a colon as object delimiter (``xml.sax.saxutils:escape``).
-
-    If `silent` is True the return value will be `None` if the import fails.
-
-    :param import_name: the dotted name for the object to import.
-    :param silent: if set to `True` import errors are ignored and
-                   `None` is returned instead.
-    :return: imported object
-    """
-    # force the import name to automatically convert to strings
-    if isinstance(import_name, unicode):
-        import_name = str(import_name)
-    try:
-        if ':' in import_name:
-            module, obj = import_name.split(':', 1)
-        elif '.' in import_name:
-            module, obj = import_name.rsplit('.', 1)
-        else:
-            return __import__(import_name)
-        # __import__ is not able to handle unicode strings in the fromlist
-        # if the module is a package
-        if isinstance(obj, unicode):
-            obj = obj.encode('utf-8')
-        return getattr(__import__(module, None, None, [obj]), obj)
-    except (ImportError, AttributeError):
-        if not silent:
-            raise
 
 
 @lru_cache()
@@ -290,9 +260,9 @@ def load_backends(backend_name):
     for path in backend_data['backend']:
         try:
             cls = import_string(path)
-        except (ImportError, AttributeError), e:
+        except (ImportError, AttributeError) as e:
             raise ImproperlyConfigured('Error importing authentication backend %s: "%s"' % (path, e))
-        except ValueError, e:
+        except ValueError:
             raise ImproperlyConfigured('Error importing authentication backends. Is NEWAUTH_BACKENDS a correctly defined dict?')
         backends.append(cls(backend_name))
     return backends
@@ -362,9 +332,9 @@ def login(request, user, backend_name=None):
                          "a backend_name to the login() function.")
 
     if not hasattr(request, 'session'):
-        raise ImproperlyConfigured("You must add "
-                                   "django.contrib.sessions.SessionMiddleware "
-                                   "to your MIDDLEWARE_CLASSES in order to support login.")
+        raise ImproperlyConfigured(
+            "You must add django.contrib.sessions.middleware.SessionMiddleware "
+            "to your settings.MIDDLEWARE in order to support login.")
 
     # TODO: pre login signal
 

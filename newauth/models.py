@@ -1,7 +1,7 @@
 #:coding=utf-8:
-
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.lru_cache import lru_cache
+from django.utils.module_loading import import_string
 
 from newauth.api import _get_backend_data
 
@@ -15,8 +15,6 @@ __all__ = (
 
 @lru_cache()
 def _get_user_models(model_name=None):
-    from newauth.api import import_string
-
     if model_name is None:
         model_name = 'default'
 
@@ -67,5 +65,5 @@ def get_anonymous_user_model(model_name=None):
 try:
     User = get_user_model('default')
     AnonymousUser = get_anonymous_user_model('default')
-except (IndexError, KeyError), e:
+except (IndexError, KeyError) as e:
     raise ImproperlyConfigured('A "default" user model is not specified. You must specify a "default" user model. Or maybe NEWAUTH_USER_MODELS isn\'t a correctly defined dict?')

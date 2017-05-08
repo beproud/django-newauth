@@ -31,7 +31,7 @@ class BackendTestCase(DjangoTestCase):
         from newauth.backend import BasicUserBackend
         from testapp.backends import TestBackend, TestBackend2, TestBackend3
 
-        backends = zip(*get_backends())
+        backends = list(zip(*get_backends()))
         
         self.assertTrue('default' in backends[0])
         self.assertTrue(isinstance(backends[1][list(backends[0]).index('default')][0], BasicUserBackend), 
