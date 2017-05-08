@@ -32,7 +32,6 @@ setup (
     packages=find_packages(),
     install_requires=[
         'Django>=1.8',
-        'six',
     ],
     test_suite='tests.main',
     zip_safe=False,

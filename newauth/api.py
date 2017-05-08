@@ -5,7 +5,7 @@ Alex Gaynor will kill me
 """
 import hashlib
 
-from six import iteritems, string_types
+from django.utils.six import iteritems, string_types
 from django.db import models
 from django.utils.encoding import smart_str
 from django.utils.lru_cache import lru_cache

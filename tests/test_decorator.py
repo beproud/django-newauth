@@ -1,7 +1,7 @@
 #:coding=utf-8:
 
 import pytest
-from six.moves.urllib_parse import urlparse
+from django.utils.six.moves.urllib_parse import urlparse
 from django.test import TestCase as DjangoTestCase
 from django.conf import settings
 
