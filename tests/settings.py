@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+from django import VERSION as DJANGO_VERSION
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -15,7 +16,7 @@ DATABASES = {
     }
 }
 ROOT_URLCONF='testapp.urls'
-MIDDLEWARE = MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -23,6 +24,8 @@ MIDDLEWARE = MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'newauth.middleware.AuthMiddleware',
 )
+if DJANGO_VERSION < (1, 9):
+    MIDDLEWARE_CLASSES = MIDDLEWARE
 TEMPLATES=[{
     'DIRS': [os.path.join(os.path.dirname(__file__), 'templates')],
     'BACKEND': 'django.template.backends.django.DjangoTemplates',

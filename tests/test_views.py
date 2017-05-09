@@ -1,8 +1,7 @@
 #:coding=utf-8:
 
-import urllib
-
 import pytest
+from django.utils.six.moves.urllib_parse import quote
 from django.test import TestCase as DjangoTestCase
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.conf import settings
@@ -59,7 +58,7 @@ class ViewsTest(DjangoTestCase):
     def test_bad_redirect_space(self):
         bad_next_url = 'test space url'
         self.assertContains(self.client.get('/account/login/'), '<form')
-        response = self.client.post('/account/login/?%s=%s' % (REDIRECT_FIELD_NAME, urllib.quote(bad_next_url)), {
+        response = self.client.post('/account/login/?%s=%s' % (REDIRECT_FIELD_NAME, quote(bad_next_url)), {
             'username': 'testuser',
             'password': 'password', 
         })
@@ -69,7 +68,7 @@ class ViewsTest(DjangoTestCase):
     def test_bad_redirect_empty(self):
         bad_next_url = ''
         self.assertContains(self.client.get('/account/login/'), '<form')
-        response = self.client.post('/account/login/?%s=%s' % (REDIRECT_FIELD_NAME, urllib.quote(bad_next_url)), {
+        response = self.client.post('/account/login/?%s=%s' % (REDIRECT_FIELD_NAME, quote(bad_next_url)), {
             'username': 'testuser',
             'password': 'password', 
         })
@@ -79,7 +78,7 @@ class ViewsTest(DjangoTestCase):
     def test_bad_redirect_domain(self):
         bad_next_url = 'http://example.com/'
         self.assertContains(self.client.get('/account/login/'), '<form')
-        response = self.client.post('/account/login/?%s=%s' % (REDIRECT_FIELD_NAME, urllib.quote(bad_next_url)), {
+        response = self.client.post('/account/login/?%s=%s' % (REDIRECT_FIELD_NAME, quote(bad_next_url)), {
             'username': 'testuser',
             'password': 'password', 
         })
@@ -89,7 +88,7 @@ class ViewsTest(DjangoTestCase):
     def test_ok_redirect_domain(self):
         ok_url = '/some/url?param=http://example.com/'
         self.assertContains(self.client.get('/account/login/'), '<form')
-        response = self.client.post('/account/login/?%s=%s' % (REDIRECT_FIELD_NAME, urllib.quote(ok_url)), {
+        response = self.client.post('/account/login/?%s=%s' % (REDIRECT_FIELD_NAME, quote(ok_url)), {
         
             'username': 'testuser',
             'password': 'password', 
