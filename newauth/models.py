@@ -65,5 +65,5 @@ def get_anonymous_user_model(model_name=None):
 try:
     User = get_user_model('default')
     AnonymousUser = get_anonymous_user_model('default')
-except (IndexError, KeyError) as e:
+except (IndexError, KeyError):
     raise ImproperlyConfigured('A "default" user model is not specified. You must specify a "default" user model. Or maybe NEWAUTH_USER_MODELS isn\'t a correctly defined dict?')
