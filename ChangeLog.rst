@@ -2,8 +2,9 @@
 ChangeLog
 =========
 
-Unrelease 0.37
-==============
+Release 0.37 (2017-05-15)
+=========================
+
 - Support Python-3.6
 - Support Django-1.11
 - Drop Django-1.9
