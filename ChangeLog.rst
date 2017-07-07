@@ -4,7 +4,7 @@ ChangeLog
 
 Unrelease 0.38
 ==============
-
+- Add missing classifiers: py36, dj versions.
 
 
 
