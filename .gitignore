@@ -15,4 +15,4 @@ build
 dist
 pip-log.txt
 docs/*/_build
-
+.pytest_cache/

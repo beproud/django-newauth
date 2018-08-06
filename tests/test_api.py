@@ -5,10 +5,12 @@ from django.test import TestCase as DjangoTestCase
 from django.conf import settings
 from django.contrib.sessions.middleware import SessionMiddleware
 import pytest
+import mock
 
 from newauth.api import authenticate, get_user, login, logout, BasicAnonymousUser
 from newauth.middleware import AuthMiddleware
 from newauth.constants import DEFAULT_SESSION_KEY
+from newauth.signals import user_logged_in, user_logged_out
 
 
 @pytest.mark.django_db
@@ -112,7 +114,9 @@ class AuthTestCase(DjangoTestCase):
 class LogoutTestCase(DjangoTestCase):
     fixtures = ['authutils_testdata.json']
 
-    def test_logout_when_logged_in(self):
+    @mock.patch.object(user_logged_in, 'send')
+    @mock.patch.object(user_logged_out, 'send')
+    def test_logout_when_logged_in(self, user_logged_out_send, user_logged_in_send):
         """
         Test to make sure that logout() works when
         the user is logged in.
@@ -142,6 +146,12 @@ class LogoutTestCase(DjangoTestCase):
         self.assertTrue(hasattr(request.auth_user, '_backend'), 'User "%s" has no _backend attribute')
         self.assertTrue(hasattr(request.auth_user, '_backend_name'), 'User "%s" has no _backend_name attribute')
 
+        user_logged_in_send.assert_called_once_with(
+            sender=TestUser3,
+            request=request,
+            user=user,
+        )
+
         logout(request)
 
         session_data = request.session.get(session_key) or {}
@@ -153,6 +163,12 @@ class LogoutTestCase(DjangoTestCase):
             request.auth_user,
             request.auth_user.__class__,
         ))
+        
+        user_logged_out_send.assert_called_once_with(
+            sender=TestUser3,
+            request=request,
+            user=user,
+        )
 
     def test_logout_when_logged_out(self):
         """
