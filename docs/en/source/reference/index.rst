@@ -16,3 +16,4 @@
     newauth.middleware
     newauth.models
     newauth.views
+    newauth.signals
