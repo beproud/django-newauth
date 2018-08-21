@@ -6,6 +6,7 @@ Unrelease 0.38
 ==============
 - Add missing classifiers: py36, dj versions.
 - provide universal wheel
+- Add feature: send logged in signal & logged out signal
 
 
 Release 0.37 (2017-05-15)

@@ -14,6 +14,10 @@ from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
+from newauth.signals import (
+    user_logged_in, user_logged_out,
+)
+
 from newauth.constants import (
     DEFAULT_SESSION_KEY,
     DEFAULT_USER_BACKENDS,
@@ -360,7 +364,8 @@ def login(request, user, backend_name=None):
     if hasattr(request, user_prop): 
         setattr(request, user_prop, user)
 
-    # TODO: post login signal
+    user_logged_in.send(sender=user.__class__, request=request, user=user)
+
 
 def logout(request):
     """
@@ -388,7 +393,10 @@ def logout(request):
             setattr(request, user_prop, AnonymousUser())
     request.session.flush()
 
-    # TODO: post logout signal
+    if isinstance(user, AnonymousUserBase):
+        user = None
+    user_logged_out.send(sender=user.__class__, request=request, user=user)
+
 
 def get_user_from_request(request):
     """
