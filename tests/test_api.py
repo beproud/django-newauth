@@ -170,7 +170,8 @@ class LogoutTestCase(DjangoTestCase):
             user=user,
         )
 
-    def test_logout_when_logged_out(self):
+    @mock.patch.object(user_logged_out, 'send')
+    def test_logout_when_logged_out(self, user_logged_out_send):
         """
         Test to make sure that logout() works when
         the user is not logged in.
@@ -197,3 +198,8 @@ class LogoutTestCase(DjangoTestCase):
             request.auth_user,
             request.auth_user.__class__,
         ))
+        user_logged_out_send.assert_called_once_with(
+            sender=None.__class__,
+            request=request,
+            user=None,
+        )

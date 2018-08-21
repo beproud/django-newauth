@@ -393,7 +393,10 @@ def logout(request):
             setattr(request, user_prop, AnonymousUser())
     request.session.flush()
 
+    if isinstance(user, AnonymousUserBase):
+        user = None
     user_logged_out.send(sender=user.__class__, request=request, user=user)
+
 
 def get_user_from_request(request):
     """
