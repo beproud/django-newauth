@@ -14,6 +14,7 @@ from django.contrib.admin.utils import flatten_fieldsets
 from django.forms.models import modelform_factory
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.debug import sensitive_post_parameters
 from django.shortcuts import render_to_response, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.template import RequestContext
@@ -128,6 +129,7 @@ class BasicUserAdmin(UserBaseAdmin):
             url(r'^(.+)/password/$', self.admin_site.admin_view(self.user_change_password))
         ] + super(BasicUserAdmin, self).get_urls()
 
+    @method_decorator(sensitive_post_parameters())
     @csrf_protect_m
     @atomic
     def add_view(self, request, form_url='', extra_context=None):
