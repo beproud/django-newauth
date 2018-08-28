@@ -7,11 +7,13 @@ from django.shortcuts import redirect, render
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.cache import never_cache
+from django.views.decorators.debug import sensitive_post_parameters
 from django.conf import settings
 
 from newauth.api import login as auth_login, logout as auth_logout
 from newauth.forms import BasicAuthForm
 
+@sensitive_post_parameters()
 @csrf_protect
 @never_cache
 def login(request, next_page=None,
