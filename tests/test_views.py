@@ -28,7 +28,7 @@ class ViewsTest(DjangoTestCase):
             'password': 'password',
         })
         self.assertEquals(response.status_code, 302)
-        self.assert_(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
+        self.assertTrue(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
 
     def test_fail_login(self):
         response = self.client.post('/account/login/', {
@@ -63,7 +63,7 @@ class ViewsTest(DjangoTestCase):
             'password': 'password', 
         })
         self.assertEquals(response.status_code, 302)
-        self.assert_(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
+        self.assertTrue(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
 
     def test_bad_redirect_empty(self):
         bad_next_url = ''
@@ -73,7 +73,7 @@ class ViewsTest(DjangoTestCase):
             'password': 'password', 
         })
         self.assertEquals(response.status_code, 302)
-        self.assert_(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
+        self.assertTrue(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
 
     def test_bad_redirect_domain(self):
         bad_next_url = 'http://example.com/'
@@ -83,7 +83,7 @@ class ViewsTest(DjangoTestCase):
             'password': 'password', 
         })
         self.assertEquals(response.status_code, 302)
-        self.assert_(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
+        self.assertTrue(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
 
     def test_ok_redirect_domain(self):
         ok_url = '/some/url?param=http://example.com/'
