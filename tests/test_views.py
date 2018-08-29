@@ -1,20 +1,22 @@
 #:coding=utf-8:
-
+import mock
 import pytest
 from django.utils.six.moves.urllib_parse import quote
 from django.test import TestCase as DjangoTestCase
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.conf import settings
+from django.http import HttpResponse
+from django import shortcuts
 
 from testapp.models import TestBasicUser
 
 
 @pytest.mark.django_db
-class ViewsTest(DjangoTestCase):
+class LoginViewsTest(DjangoTestCase):
     fixtures = ['authutils_testdata.json']
 
     def setUp(self):
-        super(ViewsTest, self).setUp()
+        super(LoginViewsTest, self).setUp()
         TestBasicUser.objects.create_user(
             username="testuser",
             password="password",
@@ -109,3 +111,71 @@ class ViewsTest(DjangoTestCase):
         })
         self.assertEquals(response.status_code, 302)
         self.assertTrue(response['Location'].endswith(ok_url))
+
+@pytest.mark.django_db
+class LogoutViewsTest(DjangoTestCase):
+    fixtures = ['authutils_testdata.json']
+
+    @mock.patch('newauth.views.render')
+    def test_get_logout_default(self, mock_render):
+        """
+        logout with HTTP GET
+        default LOGOUT_render_URL settings
+        """
+        mock_render.return_value = HttpResponse('logged out')
+        response = self.client.get('/account/logout/')
+        mock_render.assert_called()
+
+
+    @mock.patch('newauth.views.render')
+    def test_post_logout_default(self, mock_render):
+        """
+        logout with HTTP POST
+        default LOGOUT_render_URL settings
+        """
+        mock_render.return_value = HttpResponse('logged out')
+        response = self.client.post('/account/logout/')
+        mock_render.assert_called()
+
+    @mock.patch('newauth.views.redirect')
+    def test_logout_override_settings(self, mock_redirect):
+        """
+        logout with HTTP POST
+        override LOGOUT_REDIRECT_URL settings
+        """
+        mock_redirect.return_value = HttpResponse('logged out')
+        redirect_url = '/path/to/redirect/'
+        with self.settings(LOGOUT_REDIRECT_URL=redirect_url):
+            response = self.client.post('/account/logout/')
+        mock_redirect.assert_called_once_with(redirect_url)
+
+    @mock.patch('newauth.views.redirect')
+    def test_logout_to_redirect(self, mock_redirect):
+        """
+        logout with HTTP POST
+        redirect to set redirct_url
+        """
+        mock_redirect.return_value = HttpResponse('logged out')
+        redirect_url = '/path/to/resource/'
+        response = self.client.post('/account/logout/', {REDIRECT_FIELD_NAME: redirect_url})
+        mock_redirect.assert_called_once_with(redirect_url)
+
+    @mock.patch('newauth.views.render')
+    def test_get_logout_to_bad_redirect(self, mock_render):
+        """
+        logout with HTTP GET, defend open redirect.
+        """
+        mock_render.return_value = HttpResponse('logged out')
+        redirect_url = 'http://example.com/path/to/resource/'
+        response = self.client.get('/account/logout/?%s=%s'%(REDIRECT_FIELD_NAME, quote(redirect_url)))
+        mock_render.assert_called()
+
+    @mock.patch('newauth.views.render')
+    def test_post_logout_to_bad_redirect(self, mock_render):
+        """
+        logout with HTTP POST, defend open redirect.
+        """
+        mock_render.return_value = HttpResponse('logged out')
+        redirect_url = 'http://example.com/path/to/resource/'
+        response = self.client.post('/account/logout/', {REDIRECT_FIELD_NAME: redirect_url})
+        mock_render.assert_called()

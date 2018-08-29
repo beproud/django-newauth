@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from django.conf import settings
+from django.utils.http import is_safe_url
 
 from newauth.api import login as auth_login, logout as auth_logout
 from newauth.forms import BasicAuthForm
@@ -72,7 +73,7 @@ def logout(request, next_page=None, template_name='registration/logged_out.html'
             redirect_to = request.POST.get(redirect_field_name, getattr(settings, 'LOGOUT_REDIRECT_URL', ''))
         else:
             redirect_to = request.GET.get(redirect_field_name, getattr(settings, 'LOGOUT_REDIRECT_URL', ''))
-        if redirect_to:
+        if redirect_to and is_safe_url(redirect_to):
             return redirect(redirect_to)
         else:
             return render(request, template_name, context={
