@@ -58,9 +58,10 @@ class ViewsTest(DjangoTestCase):
     def test_bad_redirect_space(self):
         bad_next_url = 'test space url'
         self.assertContains(self.client.get('/account/login/'), '<form')
-        response = self.client.post('/account/login/?%s=%s' % (REDIRECT_FIELD_NAME, quote(bad_next_url)), {
+        response = self.client.post('/account/login/', {
             'username': 'testuser',
-            'password': 'password', 
+            'password': 'password',
+            REDIRECT_FIELD_NAME: bad_next_url,
         })
         self.assertEquals(response.status_code, 302)
         self.assertTrue(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
@@ -68,9 +69,10 @@ class ViewsTest(DjangoTestCase):
     def test_bad_redirect_empty(self):
         bad_next_url = ''
         self.assertContains(self.client.get('/account/login/'), '<form')
-        response = self.client.post('/account/login/?%s=%s' % (REDIRECT_FIELD_NAME, quote(bad_next_url)), {
+        response = self.client.post('/account/login/', {
             'username': 'testuser',
-            'password': 'password', 
+            'password': 'password',
+            REDIRECT_FIELD_NAME: bad_next_url,
         })
         self.assertEquals(response.status_code, 302)
         self.assertTrue(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
@@ -78,9 +80,10 @@ class ViewsTest(DjangoTestCase):
     def test_bad_redirect_domain(self):
         bad_next_url = 'http://example.com/'
         self.assertContains(self.client.get('/account/login/'), '<form')
-        response = self.client.post('/account/login/?%s=%s' % (REDIRECT_FIELD_NAME, quote(bad_next_url)), {
+        response = self.client.post('/account/login/', {
             'username': 'testuser',
             'password': 'password',
+            REDIRECT_FIELD_NAME: bad_next_url,
         })
         self.assertEquals(response.status_code, 302)
         self.assertTrue(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
@@ -88,10 +91,10 @@ class ViewsTest(DjangoTestCase):
     def test_ok_redirect_domain(self):
         ok_url = '/some/url?param=http://example.com/'
         self.assertContains(self.client.get('/account/login/'), '<form')
-        response = self.client.post('/account/login/?%s=%s' % (REDIRECT_FIELD_NAME, quote(ok_url)), {
-        
+        response = self.client.post('/account/login/', {
             'username': 'testuser',
-            'password': 'password', 
+            'password': 'password',
+            REDIRECT_FIELD_NAME: ok_url,
         })
         self.assertEquals(response.status_code, 302)
         # FIXME: redirection doesn't work. It depends newauth.views.login implementation
