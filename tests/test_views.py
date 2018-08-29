@@ -97,8 +97,7 @@ class ViewsTest(DjangoTestCase):
             REDIRECT_FIELD_NAME: ok_url,
         })
         self.assertEquals(response.status_code, 302)
-        # FIXME: redirection doesn't work. It depends newauth.views.login implementation
-        # self.assertTrue(response['Location'].endswith('/some/url?param=http://example.com/'))
+        self.assertTrue(response['Location'].endswith('/some/url?param=http://example.com/'))
 
     def test_ok_redirect(self):
         ok_url = '/path/to/resource/'
