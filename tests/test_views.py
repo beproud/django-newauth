@@ -80,7 +80,7 @@ class ViewsTest(DjangoTestCase):
         self.assertContains(self.client.get('/account/login/'), '<form')
         response = self.client.post('/account/login/?%s=%s' % (REDIRECT_FIELD_NAME, quote(bad_next_url)), {
             'username': 'testuser',
-            'password': 'password', 
+            'password': 'password',
         })
         self.assertEquals(response.status_code, 302)
         self.assertTrue(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
@@ -95,4 +95,15 @@ class ViewsTest(DjangoTestCase):
         })
         self.assertEquals(response.status_code, 302)
         # FIXME: redirection doesn't work. It depends newauth.views.login implementation
-        # assert response['Location'].endswith('/some/url?param=http://example.com/')
+        # self.assertTrue(response['Location'].endswith('/some/url?param=http://example.com/'))
+
+    def test_ok_redirect(self):
+        ok_url = '/path/to/resource/'
+        self.assertContains(self.client.get('/account/login/'), '<form')
+        response = self.client.post('/account/login/', {
+            'username': 'testuser',
+            'password': 'password',
+            REDIRECT_FIELD_NAME: ok_url,
+        })
+        self.assertEquals(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith(ok_url))
