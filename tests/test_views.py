@@ -1,17 +1,14 @@
 #:coding=utf-8:
 import mock
-import pytest
 from django.utils.six.moves.urllib_parse import quote
 from django.test import TestCase as DjangoTestCase
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.conf import settings
 from django.http import HttpResponse
-from django import shortcuts
 
 from testapp.models import TestBasicUser
 
 
-@pytest.mark.django_db
 class LoginViewsTest(DjangoTestCase):
     fixtures = ['authutils_testdata.json']
 
@@ -35,7 +32,7 @@ class LoginViewsTest(DjangoTestCase):
     def test_fail_login(self):
         response = self.client.post('/account/login/', {
             'username': 'testclient',
-            'password': 'bad_password', 
+            'password': 'bad_password',
         })
         self.assertEquals(response.status_code, 200)
         self.assertFormError(response, 'form', None, "Please enter a correct username and password. Note that both fields may be case-sensitive.")
@@ -44,7 +41,7 @@ class LoginViewsTest(DjangoTestCase):
         # blank username
         response = self.client.post('/account/login/', {
             'username': '',
-            'password': 'password', 
+            'password': 'password',
         })
         self.assertEquals(response.status_code, 200)
         self.assertFormError(response, 'form', 'username', u'This field is required.')
@@ -52,7 +49,7 @@ class LoginViewsTest(DjangoTestCase):
         # blank password
         response = self.client.post('/account/login/', {
             'username': 'testuser',
-            'password': '', 
+            'password': '',
         })
         self.assertEquals(response.status_code, 200)
         self.assertFormError(response, 'form', 'password', u'This field is required.')
@@ -112,7 +109,7 @@ class LoginViewsTest(DjangoTestCase):
         self.assertEquals(response.status_code, 302)
         self.assertTrue(response['Location'].endswith(ok_url))
 
-@pytest.mark.django_db
+
 class LogoutViewsTest(DjangoTestCase):
     fixtures = ['authutils_testdata.json']
 
@@ -123,9 +120,8 @@ class LogoutViewsTest(DjangoTestCase):
         default LOGOUT_render_URL settings
         """
         mock_render.return_value = HttpResponse('logged out')
-        response = self.client.get('/account/logout/')
+        self.client.get('/account/logout/')
         mock_render.assert_called()
-
 
     @mock.patch('newauth.views.render')
     def test_post_logout_default(self, mock_render):
@@ -134,7 +130,7 @@ class LogoutViewsTest(DjangoTestCase):
         default LOGOUT_render_URL settings
         """
         mock_render.return_value = HttpResponse('logged out')
-        response = self.client.post('/account/logout/')
+        self.client.post('/account/logout/')
         mock_render.assert_called()
 
     @mock.patch('newauth.views.redirect')
@@ -146,7 +142,7 @@ class LogoutViewsTest(DjangoTestCase):
         mock_redirect.return_value = HttpResponse('logged out')
         redirect_url = '/path/to/redirect/'
         with self.settings(LOGOUT_REDIRECT_URL=redirect_url):
-            response = self.client.post('/account/logout/')
+            self.client.post('/account/logout/')
         mock_redirect.assert_called_once_with(redirect_url)
 
     @mock.patch('newauth.views.redirect')
@@ -157,7 +153,7 @@ class LogoutViewsTest(DjangoTestCase):
         """
         mock_redirect.return_value = HttpResponse('logged out')
         redirect_url = '/path/to/resource/'
-        response = self.client.post('/account/logout/', {REDIRECT_FIELD_NAME: redirect_url})
+        self.client.post('/account/logout/', {REDIRECT_FIELD_NAME: redirect_url})
         mock_redirect.assert_called_once_with(redirect_url)
 
     @mock.patch('newauth.views.render')
@@ -167,7 +163,7 @@ class LogoutViewsTest(DjangoTestCase):
         """
         mock_render.return_value = HttpResponse('logged out')
         redirect_url = 'http://example.com/path/to/resource/'
-        response = self.client.get('/account/logout/?%s=%s'%(REDIRECT_FIELD_NAME, quote(redirect_url)))
+        self.client.get('/account/logout/?%s=%s' % (REDIRECT_FIELD_NAME, quote(redirect_url)))
         mock_render.assert_called()
 
     @mock.patch('newauth.views.render')
@@ -177,5 +173,5 @@ class LogoutViewsTest(DjangoTestCase):
         """
         mock_render.return_value = HttpResponse('logged out')
         redirect_url = 'http://example.com/path/to/resource/'
-        response = self.client.post('/account/logout/', {REDIRECT_FIELD_NAME: redirect_url})
+        self.client.post('/account/logout/', {REDIRECT_FIELD_NAME: redirect_url})
         mock_render.assert_called()
