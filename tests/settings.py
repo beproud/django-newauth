@@ -56,3 +56,4 @@ NEWAUTH_BACKENDS = {
     }
 }
 SECRET_KEY = '<key>'
+LOGIN_REDIRECT_URL = '/newauth_login_redirect/'
