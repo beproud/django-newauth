@@ -4,7 +4,9 @@ import re
 
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
+from django.views.generic import View
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
@@ -14,16 +16,35 @@ from django.utils.http import is_safe_url
 from newauth.api import login as auth_login, logout as auth_logout
 from newauth.forms import BasicAuthForm
 
-@sensitive_post_parameters()
-@csrf_protect
-@never_cache
-def login(request, next_page=None,
-          template_name='registration/login.html',
-          redirect_field_name=REDIRECT_FIELD_NAME,
-          authentication_form=BasicAuthForm):
+
+class LoginView(View):
     """Displays the login form and handles the login action."""
 
-    if request.method == "POST":
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(never_cache)
+    @method_decorator(csrf_protect)
+    def dispatch(self, *args, **kwargs):
+        return super(LoginView, self).dispatch(*args, **kwargs)
+
+    def _is_safe_redirect_to(self, redirect_to):
+        # Light security check -- make sure redirect_to isn't garbage.
+        if not redirect_to or ' ' in redirect_to:
+            return False
+
+        # Heavier security check -- redirects to http://example.com should 
+        # not be allowed, but things like /view/?param=http://example.com 
+        # should be allowed. This regex checks if there is a '//' *before* a
+        # question mark.
+        elif '//' in redirect_to and re.match(r'[^\?]*//', redirect_to):
+              return False
+
+        return True
+
+    def post(self, request, next_page=None,
+            template_name='registration/login.html',
+            redirect_field_name=REDIRECT_FIELD_NAME,
+            authentication_form=BasicAuthForm):
+
         redirect_to = request.POST.get(redirect_field_name, '')
         form = authentication_form(data=request.POST)
 
@@ -34,15 +55,7 @@ def login(request, next_page=None,
                 form._errors[NON_FIELD_ERRORS] = form.error_class([_("Your Web browser doesn't appear to have cookies enabled. Cookies are required for logging in.")])
                 # memo: this feature is removed on Django: https://github.com/django/django/pull/644
             else:
-                # Light security check -- make sure redirect_to isn't garbage.
-                if not redirect_to or ' ' in redirect_to:
-                    redirect_to = next_page or settings.LOGIN_REDIRECT_URL
-                
-                # Heavier security check -- redirects to http://example.com should 
-                # not be allowed, but things like /view/?param=http://example.com 
-                # should be allowed. This regex checks if there is a '//' *before* a
-                # question mark.
-                elif '//' in redirect_to and re.match(r'[^\?]*//', redirect_to):
+                if not self._is_safe_redirect_to(redirect_to):
                     redirect_to = next_page or settings.LOGIN_REDIRECT_URL
                
                 # Okay, security checks complete. Log the user in.
@@ -52,18 +65,33 @@ def login(request, next_page=None,
                     request.session.delete_test_cookie()
 
                 return redirect(redirect_to)
+        
+        if hasattr(request, 'session'):
+            request.session.set_test_cookie()
+        
+        return render(request, template_name, context={
+            'form': form,
+            redirect_field_name: redirect_to,
+        })
+    
+    def get(self, request, next_page=None,
+            template_name='registration/login.html',
+            redirect_field_name=REDIRECT_FIELD_NAME,
+            authentication_form=BasicAuthForm):
 
-    else:
         redirect_to = request.GET.get(redirect_field_name, '')
         form = authentication_form()
 
-    if hasattr(request, 'session'):
-        request.session.set_test_cookie()
-    
-    return render(request, template_name, context={
-        'form': form,
-        redirect_field_name: redirect_to,
-    })
+        if hasattr(request, 'session'):
+            request.session.set_test_cookie()
+        
+        return render(request, template_name, context={
+            'form': form,
+            redirect_field_name: redirect_to,
+        })
+
+login = LoginView.as_view()
+
 
 def logout(request, next_page=None, template_name='registration/logged_out.html', redirect_field_name=REDIRECT_FIELD_NAME):
     "Logs out the user and displays 'You are logged out' message."
