@@ -10,6 +10,7 @@ Unrelease 0.38
 - Add feature: send logged in signal & logged out signal
 - Security: masking sensitive post parameter
 - Security: safe redirect url for open redirect possibility
+- Refactor login view to class base view
 
 Release 0.37 (2017-05-15)
 =========================
