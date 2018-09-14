@@ -26,7 +26,13 @@ class LoginView(View):
     def dispatch(self, *args, **kwargs):
         return super(LoginView, self).dispatch(*args, **kwargs)
 
-    def _is_safe_redirect_to(self, redirect_to):
+    def _is_safe_redirect_to(self, request, redirect_to):
+        """security check method -- redirect url is safe
+
+        :param request: django request object, for custom security check.
+        :param redirect_to: str, this method check url.
+        :return: result of security check. True is safe, False is not safe. 
+        """
         # Light security check -- make sure redirect_to isn't garbage.
         if not redirect_to or ' ' in redirect_to:
             return False
@@ -55,7 +61,7 @@ class LoginView(View):
                 form._errors[NON_FIELD_ERRORS] = form.error_class([_("Your Web browser doesn't appear to have cookies enabled. Cookies are required for logging in.")])
                 # memo: this feature is removed on Django: https://github.com/django/django/pull/644
             else:
-                if not self._is_safe_redirect_to(redirect_to):
+                if not self._is_safe_redirect_to(request, redirect_to):
                     redirect_to = next_page or settings.LOGIN_REDIRECT_URL
                
                 # Okay, security checks complete. Log the user in.
