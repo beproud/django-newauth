@@ -15,6 +15,14 @@ from django.utils.http import is_safe_url
 from newauth.api import login as auth_login, logout as auth_logout
 from newauth.forms import BasicAuthForm
 
+
+def _is_safe_url(redirect_to, request):
+    if django.VERSION < (1, 11):
+        return is_safe_url(redirect_to, host=request.get_host())
+    else:
+        return is_safe_url(redirect_to, allowed_hosts={request.get_host()})
+
+
 @sensitive_post_parameters()
 @csrf_protect
 @never_cache
@@ -40,12 +48,8 @@ def login(request, next_page=None,
                     redirect_to = next_page or settings.LOGIN_REDIRECT_URL
                 else:
                     # Heavier security check -- not redirected to another host
-                    if django.VERSION < (1, 11):
-                        if not is_safe_url(redirect_to, host=request.get_host()):
-                            redirect_to = next_page or settings.LOGIN_REDIRECT_URL
-                    else:
-                        if not is_safe_url(redirect_to, allowed_hosts={request.get_host()}):
-                            redirect_to = next_page or settings.LOGIN_REDIRECT_URL
+                    if not _is_safe_url(redirect_to, request):
+                        redirect_to = next_page or settings.LOGIN_REDIRECT_URL
                
                 # Okay, security checks complete. Log the user in.
                 auth_login(request, form.get_user())
@@ -75,7 +79,7 @@ def logout(request, next_page=None, template_name='registration/logged_out.html'
             redirect_to = request.POST.get(redirect_field_name, getattr(settings, 'LOGOUT_REDIRECT_URL', ''))
         else:
             redirect_to = request.GET.get(redirect_field_name, getattr(settings, 'LOGOUT_REDIRECT_URL', ''))
-        if redirect_to and is_safe_url(redirect_to):
+        if redirect_to and _is_safe_url(redirect_to, request):
             return redirect(redirect_to)
         else:
             return render(request, template_name, context={

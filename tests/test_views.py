@@ -197,3 +197,16 @@ class LogoutViewsTest(DjangoTestCase):
         response = self.client.get('/account/logout/?%s=%s' % (REDIRECT_FIELD_NAME, quote(redirect_url)))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Logged out page')
+
+    def test_get_logout_to_ok_redirect(self):
+        """
+        logout with HTTP GET, ok redirect.
+        """
+        redirect_url = 'http://django-newauth.com/path/to/resource/'
+        with self.settings(ALLOWED_HOSTS=['django-newauth.com']):
+            response = self.client.get(
+                '/account/logout/?%s=%s' % (REDIRECT_FIELD_NAME, quote(redirect_url)),
+                HTTP_HOST='django-newauth.com',
+            )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith(redirect_url))
