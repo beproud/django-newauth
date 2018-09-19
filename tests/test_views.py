@@ -89,22 +89,49 @@ class LoginViewsTest(DjangoTestCase):
     def test_bad_redirect_domain(self):
         bad_next_url = 'http://example.com/'
         self.assertContains(self.client.get('/account/login/'), '<form')
-        response = self.client.post('/account/login/', {
-            'username': 'testuser',
-            'password': 'password',
-            REDIRECT_FIELD_NAME: bad_next_url,
-        })
+        with self.settings(ALLOWED_HOSTS=['django-newauth.com']):
+            response = self.client.post('/account/login/', {
+                'username': 'testuser',
+                'password': 'password',
+                REDIRECT_FIELD_NAME: bad_next_url,
+            }, HTTP_HOST='django-newauth.com')
+        self.assertEquals(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
+
+    def test_bad_redirect_domain_other_case(self):
+        bad_next_url = 'http://example2.com/'
+        self.assertContains(self.client.get('/account/login/'), '<form')
+        with self.settings(ALLOWED_HOSTS=['example.com']):
+            response = self.client.post('/account/login/', {
+                'username': 'testuser',
+                'password': 'password',
+                REDIRECT_FIELD_NAME: bad_next_url,
+            }, HTTP_HOST='example.com')
         self.assertEquals(response.status_code, 302)
         self.assertTrue(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
 
     def test_ok_redirect_domain(self):
+        next_url = 'http://django-newauth.com/path/to/resource/'
+        self.assertContains(
+            self.client.get('/account/login/'), '<form')
+        with self.settings(ALLOWED_HOSTS=['django-newauth.com']):
+            response = self.client.post('/account/login/', {
+                'username': 'testuser',
+                'password': 'password',
+                REDIRECT_FIELD_NAME: next_url,
+            }, HTTP_HOST='django-newauth.com')
+        self.assertEquals(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith(next_url))
+
+    def test_ok_redirect_domain_as_parameter(self):
         ok_url = '/some/url?param=http://example.com/'
         self.assertContains(self.client.get('/account/login/'), '<form')
-        response = self.client.post('/account/login/', {
-            'username': 'testuser',
-            'password': 'password',
-            REDIRECT_FIELD_NAME: ok_url,
-        })
+        with self.settings(ALLOWED_HOSTS=['django-newauth.com']):
+            response = self.client.post('/account/login/', {
+                'username': 'testuser',
+                'password': 'password',
+                REDIRECT_FIELD_NAME: ok_url,
+            }, HTTP_HOST='django-newauth.com')
         self.assertEquals(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/some/url?param=http://example.com/'))
 

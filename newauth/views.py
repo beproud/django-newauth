@@ -2,6 +2,7 @@
 
 import re
 
+import django
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext as _
@@ -37,13 +38,14 @@ def login(request, next_page=None,
                 # Light security check -- make sure redirect_to isn't garbage.
                 if not redirect_to or ' ' in redirect_to:
                     redirect_to = next_page or settings.LOGIN_REDIRECT_URL
-                
-                # Heavier security check -- redirects to http://example.com should 
-                # not be allowed, but things like /view/?param=http://example.com 
-                # should be allowed. This regex checks if there is a '//' *before* a
-                # question mark.
-                elif '//' in redirect_to and re.match(r'[^\?]*//', redirect_to):
-                    redirect_to = next_page or settings.LOGIN_REDIRECT_URL
+                else:
+                    # Heavier security check -- not redirected to another host
+                    if django.VERSION < (1, 11):
+                        if not is_safe_url(redirect_to, host=request.get_host()):
+                            redirect_to = next_page or settings.LOGIN_REDIRECT_URL
+                    else:
+                        if not is_safe_url(redirect_to, allowed_hosts={request.get_host()}):
+                            redirect_to = next_page or settings.LOGIN_REDIRECT_URL
                
                 # Okay, security checks complete. Log the user in.
                 auth_login(request, form.get_user())
