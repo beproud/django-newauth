@@ -46,10 +46,9 @@ def login(request, next_page=None,
                 # Light security check -- make sure redirect_to isn't garbage.
                 if not redirect_to or ' ' in redirect_to:
                     redirect_to = next_page or settings.LOGIN_REDIRECT_URL
-                else:
-                    # Heavier security check -- not redirected to another host
-                    if not _is_safe_url(redirect_to, request):
-                        redirect_to = next_page or settings.LOGIN_REDIRECT_URL
+                # Heavier security check -- not redirected to another host
+                elif not _is_safe_url(redirect_to, request):
+                    redirect_to = next_page or settings.LOGIN_REDIRECT_URL
                
                 # Okay, security checks complete. Log the user in.
                 auth_login(request, form.get_user())
