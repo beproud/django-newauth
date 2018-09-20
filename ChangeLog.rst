@@ -2,8 +2,8 @@
 ChangeLog
 =========
 
-Unrelease 0.38
-==============
+Release 0.38 (2018-09-20)
+=========================
 
 - Add missing classifiers: py36, dj versions.
 - provide universal wheel
