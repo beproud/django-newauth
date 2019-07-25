@@ -2,6 +2,11 @@
 ChangeLog
 =========
 
+Unrelease 0.39
+===============
+
+- Fixed: If login_required is used with Python3, login authentication after the second time fails.
+
 Release 0.38 (2018-09-20)
 =========================
 

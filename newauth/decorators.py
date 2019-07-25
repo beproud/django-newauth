@@ -42,7 +42,7 @@ def login_required(backend_list=None, login_url=None, redirect_field_name=REDIRE
     else:
         backends = get_backends(backend_list)
 
-    backend_names = map(lambda b: b[0], backends)
+    backend_names = [b[0] for b in backends]
 
     actual_decorator = user_passes_test(
         lambda u: u.is_authenticated() and (
