@@ -87,7 +87,7 @@ class UserBase(models.Model):
         return self.get_display_name()
     get_display_name.short_description = _('name')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.get_display_name()
 
     class Meta:
@@ -129,7 +129,7 @@ class AnonymousUserBase(object):
     def get_real_name(self):
         return self.get_display_name()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.get_display_name()
 
 
