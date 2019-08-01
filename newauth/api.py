@@ -3,6 +3,7 @@
 """
 Alex Gaynor will kill me
 """
+from future.utils import python_2_unicode_compatible
 import hashlib
 
 from django.utils.six import iteritems, string_types
@@ -42,6 +43,7 @@ __all__ = (
 )
 
 
+@python_2_unicode_compatible
 class UserBase(models.Model):
     """
     Base User class
@@ -96,6 +98,7 @@ class UserBase(models.Model):
         verbose_name_plural = _('users')
 
 
+@python_2_unicode_compatible
 class AnonymousUserBase(object):
     """
     A simple anonymous user.
