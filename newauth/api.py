@@ -7,7 +7,7 @@ import hashlib
 
 from django.utils.six import iteritems, string_types
 from django.db import models
-from django.utils.encoding import smart_str
+from django.utils.encoding import python_2_unicode_compatible, smart_str
 from django.utils.lru_cache import lru_cache
 from django.utils.module_loading import import_string
 from django.core.exceptions import ImproperlyConfigured
@@ -42,6 +42,7 @@ __all__ = (
 )
 
 
+@python_2_unicode_compatible
 class UserBase(models.Model):
     """
     Base User class
@@ -75,8 +76,8 @@ class UserBase(models.Model):
         public pages. This method should return
         a unicode object.
         """
-        from django.utils.encoding import force_unicode
-        return force_unicode(self.pk)
+        from django.utils.encoding import force_text
+        return force_text(self.pk)
     get_display_name.short_description = _('display name')
 
     def get_real_name(self):
@@ -87,7 +88,7 @@ class UserBase(models.Model):
         return self.get_display_name()
     get_display_name.short_description = _('name')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.get_display_name()
 
     class Meta:
@@ -96,6 +97,7 @@ class UserBase(models.Model):
         verbose_name_plural = _('users')
 
 
+@python_2_unicode_compatible
 class AnonymousUserBase(object):
     """
     A simple anonymous user.
@@ -129,7 +131,7 @@ class AnonymousUserBase(object):
     def get_real_name(self):
         return self.get_display_name()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.get_display_name()
 
 
