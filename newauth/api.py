@@ -75,8 +75,8 @@ class UserBase(models.Model):
         public pages. This method should return
         a unicode object.
         """
-        from django.utils.encoding import force_unicode
-        return force_unicode(self.pk)
+        from django.utils.encoding import force_str
+        return force_str(self.pk)
     get_display_name.short_description = _('display name')
 
     def get_real_name(self):
