@@ -3,12 +3,11 @@
 """
 Alex Gaynor will kill me
 """
-from future.utils import python_2_unicode_compatible
 import hashlib
 
 from django.utils.six import iteritems, string_types
 from django.db import models
-from django.utils.encoding import smart_str
+from django.utils.encoding import python_2_unicode_compatible, smart_str
 from django.utils.lru_cache import lru_cache
 from django.utils.module_loading import import_string
 from django.core.exceptions import ImproperlyConfigured
@@ -77,8 +76,8 @@ class UserBase(models.Model):
         public pages. This method should return
         a unicode object.
         """
-        from django.utils.encoding import force_str
-        return force_str(self.pk)
+        from django.utils.encoding import force_text
+        return force_text(self.pk)
     get_display_name.short_description = _('display name')
 
     def get_real_name(self):
