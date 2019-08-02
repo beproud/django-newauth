@@ -282,7 +282,8 @@ def get_backends(backend_names=None):
     if backend_names is None:
         backend_names = all_backend_names
     else:
-        backend_names = filter(lambda b: b in backend_names, all_backend_names)
+        backend_names = [backend_name for backend_name in all_backend_names
+                         if backend_name in backend_names]
 
     backends = []
     for backend_name in backend_names:
