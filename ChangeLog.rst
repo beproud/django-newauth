@@ -6,6 +6,8 @@ Unrelease 0.39
 ===============
 
 - Fixed: If login_required is used with Python3, login authentication after the second time fails.
+- Support Django-2.2
+- Drop Django-1.10
 
 Release 0.38 (2018-09-20)
 =========================

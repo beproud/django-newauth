@@ -3,17 +3,11 @@ sudo: false
 matrix:
   include:
     - python: '2.7'
-      env: TOXENV=py27-dj18
-    - python: '2.7'
-      env: TOXENV=py27-dj110
-    - python: '2.7'
       env: TOXENV=py27-dj111
     - python: '3.6'
-      env: TOXENV=py36-dj18
-    - python: '3.6'
-      env: TOXENV=py36-dj110
-    - python: '3.6'
       env: TOXENV=py36-dj111
+    - python: '3.6'
+      env: TOXENV=py36-dj22
 install:
   - pip install tox
 script: tox
