@@ -2,8 +2,8 @@
 ChangeLog
 =========
 
-Unrelease 0.39
-===============
+Release 0.39 (2020-04-30)
+=========================
 
 - Fixed: If login_required is used with Python3, login authentication after the second time fails.
 - Support Django-2.2
