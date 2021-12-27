@@ -1,6 +1,7 @@
 #:coding=utf-8:
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.lru_cache import lru_cache
+from functools import lru_cache
+
 from django.utils.module_loading import import_string
 
 from newauth.api import _get_backend_data

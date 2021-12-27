@@ -1,6 +1,6 @@
 #:coding=utf-8:
+from urllib.parse import quote
 import mock
-from django.utils.six.moves.urllib_parse import quote
 from django.test import TestCase as DjangoTestCase
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.conf import settings

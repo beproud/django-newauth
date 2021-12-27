@@ -4,11 +4,10 @@
 Alex Gaynor will kill me
 """
 import hashlib
+from functools import lru_cache
 
-from django.utils.six import iteritems, string_types
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible, smart_str
-from django.utils.lru_cache import lru_cache
+from django.utils.encoding import smart_str
 from django.utils.module_loading import import_string
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
@@ -42,7 +41,6 @@ __all__ = (
 )
 
 
-@python_2_unicode_compatible
 class UserBase(models.Model):
     """
     Base User class
@@ -97,7 +95,6 @@ class UserBase(models.Model):
         verbose_name_plural = _('users')
 
 
-@python_2_unicode_compatible
 class AnonymousUserBase(object):
     """
     A simple anonymous user.
@@ -244,9 +241,9 @@ def _get_backend_data():
     from django.conf import settings
 
     backend_data = getattr(settings, 'NEWAUTH_BACKENDS', DEFAULT_USER_BACKENDS)
-    for key, given_data in iteritems(backend_data):
+    for key, given_data in backend_data.items():
         data = DEFAULT_USER_BACKENDS['default'].copy() 
-        if isinstance(given_data['backend'], string_types):
+        if isinstance(given_data['backend'], str):
             given_data['backend'] = (given_data['backend'],)
         data.update(given_data)
         backend_data[key] = data
