@@ -19,7 +19,7 @@ def user_passes_test(test_func, login_url=None, redirect_field_name=REDIRECT_FIE
         login_url = settings.LOGIN_URL
 
     def decorator(view_func):
-        @wraps
+        @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):
             if test_func(get_user_from_request(request)):
                 return view_func(request, *args, **kwargs)
