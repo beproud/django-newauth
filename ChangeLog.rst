@@ -2,6 +2,14 @@
 ChangeLog
 =========
 
+Release 0.40 (2021-12-27)
+=========================
+
+- Support Django-3.2
+- Support Python-3.7, 3.8, 3.9, 3.10
+- Drop Django-1.11, 3.1
+- Drop Python-2.7
+
 Release 0.39 (2020-04-30)
 =========================
 
