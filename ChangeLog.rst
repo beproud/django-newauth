@@ -2,7 +2,7 @@
 ChangeLog
 =========
 
-Release 0.40 (2021-12-xx)
+Release 0.40 (2021-12-28)
 =========================
 
 - Support Django-3.2
