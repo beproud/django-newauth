@@ -15,6 +15,7 @@ setup (
     version=VERSION,
     description='Authentication for Django done right',
     long_description=read('README.rst') + read('ChangeLog.rst'),
+    long_description_content_type='text/x-rst',
     author='BeProud',
     author_email='project@beproud.jp',
     url='http://django-newauth.rtfd.io/',
