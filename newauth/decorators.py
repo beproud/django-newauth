@@ -1,12 +1,8 @@
 #:coding=utf-8:
 
-try:
-    from functools import wraps
-except ImportError:
-    from django.utils.functional import wraps  # Python 2.4 fallback.
+from functools import wraps
 
 from django.http import HttpResponseRedirect
-from django.utils.decorators import available_attrs
 from django.utils.http import urlquote
 
 from newauth.constants import REDIRECT_FIELD_NAME
@@ -23,13 +19,14 @@ def user_passes_test(test_func, login_url=None, redirect_field_name=REDIRECT_FIE
         login_url = settings.LOGIN_URL
 
     def decorator(view_func):
+        @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):
             if test_func(get_user_from_request(request)):
                 return view_func(request, *args, **kwargs)
             path = urlquote(request.get_full_path())
             tup = login_url, redirect_field_name, path
             return HttpResponseRedirect('%s?%s=%s' % tup)
-        return wraps(view_func, assigned=available_attrs(view_func))(_wrapped_view)
+        return _wrapped_view
     return decorator
 
 def login_required(backend_list=None, login_url=None, redirect_field_name=REDIRECT_FIELD_NAME):

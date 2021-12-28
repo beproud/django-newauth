@@ -1,7 +1,5 @@
 #:coding=utf-8:
 
-import re
-
 import django
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.shortcuts import redirect, render

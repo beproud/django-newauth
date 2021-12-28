@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-from django import VERSION as DJANGO_VERSION
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -24,8 +23,7 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'newauth.middleware.AuthMiddleware',
 )
-if DJANGO_VERSION < (1, 9):
-    MIDDLEWARE_CLASSES = MIDDLEWARE
+
 TEMPLATES=[{
     'DIRS': [os.path.join(os.path.dirname(__file__), 'templates')],
     'BACKEND': 'django.template.backends.django.DjangoTemplates',

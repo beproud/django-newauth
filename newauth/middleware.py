@@ -1,12 +1,7 @@
 #:coding=utf-8:
 
-from django import VERSION as DJANGO_VERSION
 from django.conf import settings
-
-if DJANGO_VERSION >= (1, 10):
-    from django.utils.deprecation import MiddlewareMixin
-else:
-    MiddlewareMixin = object
+from django.utils.deprecation import MiddlewareMixin
 
 from newauth.constants import DEFAULT_USER_PROPERTY
 
