@@ -10,7 +10,7 @@ from django.db import models
 from django.utils.encoding import smart_str
 from django.utils.module_loading import import_string
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
 from newauth.signals import (
@@ -74,8 +74,8 @@ class UserBase(models.Model):
         public pages. This method should return
         a unicode object.
         """
-        from django.utils.encoding import force_text
-        return force_text(self.pk)
+        from django.utils.encoding import force_str
+        return force_str(self.pk)
     get_display_name.short_description = _('display name')
 
     def get_real_name(self):

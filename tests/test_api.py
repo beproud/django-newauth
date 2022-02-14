@@ -136,8 +136,8 @@ class LogoutTestCase(DjangoTestCase):
         
         session_key = getattr(settings, 'NEWAUTH_SESSION_KEY', DEFAULT_SESSION_KEY)
         session_data = request.session.get(session_key) or {}
-        self.assertEquals(session_data.get('uid'), 1)
-        self.assertEquals(session_data.get('bn'), 'testapp3')
+        self.assertEqual(session_data.get('uid'), 1)
+        self.assertEqual(session_data.get('bn'), 'testapp3')
         self.assertTrue(request.auth_user.is_authenticated(), "%s is not authenticated" % request.auth_user)
         self.assertTrue(isinstance(request.auth_user, TestUser3), 'User "%s" is wrong User class "%s"' % (
             request.auth_user,
@@ -155,8 +155,8 @@ class LogoutTestCase(DjangoTestCase):
         logout(request)
 
         session_data = request.session.get(session_key) or {}
-        self.assertEquals(session_data.get('uid'), None)
-        self.assertEquals(session_data.get('bn'), None)
+        self.assertEqual(session_data.get('uid'), None)
+        self.assertEqual(session_data.get('bn'), None)
         self.assertTrue(hasattr(request, 'auth_user'), 'Request has no auth_user attribute')
         self.assertTrue(request.auth_user.is_anonymous(), 'User "%s" is authenticated' % request.auth_user)
         self.assertTrue(isinstance(request.auth_user, TestAnonymousUser3), 'User "%s" is wrong AnonymousUser class "%s"' % (
@@ -189,8 +189,8 @@ class LogoutTestCase(DjangoTestCase):
 
         session_key = getattr(settings, 'NEWAUTH_SESSION_KEY', DEFAULT_SESSION_KEY)
         session_data = request.session.get(session_key) or {}
-        self.assertEquals(session_data.get('uid'), None)
-        self.assertEquals(session_data.get('bn'), None)
+        self.assertEqual(session_data.get('uid'), None)
+        self.assertEqual(session_data.get('bn'), None)
         self.assertTrue(hasattr(request, 'auth_user'), 'Request has no auth_user attribute')
         self.assertTrue(request.auth_user.is_anonymous(), 'User "%s" is authenticated' % request.auth_user)
         self.assertTrue(request.auth_user is old_anon_user, 'Anonymous User object was changed')

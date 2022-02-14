@@ -2,7 +2,7 @@
 
 from django import forms
 from django.conf import settings
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib import admin
 from django.http import Http404
 from django.shortcuts import redirect
@@ -15,7 +15,7 @@ from django.forms.models import modelform_factory
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.template import RequestContext
 from django.db.transaction import atomic
@@ -126,7 +126,7 @@ class BasicUserAdmin(UserBaseAdmin):
 
     def get_urls(self):
         return [
-            url(r'^(.+)/password/$', self.admin_site.admin_view(self.user_change_password))
+            re_path(r'^(.+)/password/$', self.admin_site.admin_view(self.user_change_password))
         ] + super(BasicUserAdmin, self).get_urls()
 
     @method_decorator(sensitive_post_parameters())
@@ -170,7 +170,7 @@ class BasicUserAdmin(UserBaseAdmin):
         fieldsets = [(None, {'fields': form.base_fields.keys()})]
         adminForm = AdminForm(form, fieldsets, {})
 
-        return render_to_response(self.change_user_password_template or 'admin/newauth/basicuser/change_password.html', {
+        return render(request, self.change_user_password_template or 'admin/newauth/basicuser/change_password.html', {
             'title': _('Change password: %s') % escape(str(user)),
             'adminForm': adminForm,
             'form': form,
