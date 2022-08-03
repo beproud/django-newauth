@@ -2,7 +2,7 @@
 
 from django import forms
 from django.conf import settings
-from django.urls import re_path
+from django.urls import path
 from django.contrib import admin
 from django.http import Http404
 from django.shortcuts import redirect
@@ -126,7 +126,11 @@ class BasicUserAdmin(UserBaseAdmin):
 
     def get_urls(self):
         return [
-            re_path(r'^(.+)/password/$', self.admin_site.admin_view(self.user_change_password))
+            path(
+                '<id>/password/',
+                self.admin_site.admin_view(self.user_change_password),
+                name='auth_user_password_change'
+            )
         ] + super(BasicUserAdmin, self).get_urls()
 
     @method_decorator(sensitive_post_parameters())
