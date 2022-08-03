@@ -1,7 +1,7 @@
 #:coding=utf-8:
-from django.urls import re_path, include
+from django.urls import path, include
 from django.http import HttpResponse
-
+from newauth import views
 from newauth.decorators import login_required
 
 
@@ -10,7 +10,8 @@ def testview(request):
 
 
 urlpatterns = [
-    re_path(r'^account/', include('newauth.urls')),
-    re_path(r'^testapp/login_required/', login_required(testview)),
-    re_path(r'^testapp/testapp_login_required', login_required(["testapp"])(testview)),
+    path('account/login/', views.login, name='newauth_login'),
+    path('account/logout/', views.logout, name='newauth_logout'),
+    path('testapp/login_required/', login_required(testview), name='login_required'),
+    path('testapp/testapp_login_required/', login_required(["testapp"])(testview), name='testapp_login_required'),
 ]
