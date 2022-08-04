@@ -2,9 +2,13 @@
 ChangeLog
 =========
 
-Release 0.41 (Unreleased)
+Release 0.42 (Unreleased)
 =========================
 
+Release 0.41 (2022-08-x)
+=========================
+
+- Fixed: Django-3.2 Support
 
 Release 0.40 (2021-12-28)
 =========================
