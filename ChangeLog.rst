@@ -8,7 +8,11 @@ Release 0.42 (Unreleased)
 Release 0.41 (2022-08-x)
 =========================
 
-- Fixed: Django-3.2 Support
+- Fixed: django.conf.urls.url() is deprecated. Also, path() is more concise than re_path(). Change to use path().
+- Fixed: django.shortcuts.render_to_response() is deprecated, change to use django.shortcuts.render().
+- Fixed: django.utils.translation.ugettext_lazy() is deprecated, change to use django.utils.translation.gettext_lazy().
+- Fixed: django.utils.encoding.force_text() is deprecated, change to use django.utils.encoding.force_str().
+- Fixed: Deprecated assertEquals() in unittest used by Django, changed to assertEqual().
 
 Release 0.40 (2021-12-28)
 =========================
