@@ -11,5 +11,5 @@ def testview(request):
 urlpatterns = [
     path('account/', include('newauth.urls')),
     path('testapp/login_required/', login_required(testview)),
-    path('testapp/testapp_login_required/', login_required(["testapp"])(testview)),
+    path('testapp/testapp_login_required', login_required(["testapp"])(testview)),
 ]
