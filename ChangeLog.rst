@@ -5,7 +5,7 @@ ChangeLog
 Release 0.42 (Unreleased)
 =========================
 
-Release 0.41 (2022-08-x)
+Release 0.41 (2022-08-16)
 =========================
 
 - Fixed: django.conf.urls.url() is deprecated. Also, path() is more concise than re_path(). Change to use path().
