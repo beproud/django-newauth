@@ -1,11 +1,11 @@
 #:coding=utf-8:
 
-from django.conf.urls import url
+from django.urls import path
 
 from newauth.views import login, logout
 
 
 urlpatterns = [
-    url(r'^login/$', login, name='newauth_login'),
-    url(r'^logout/$', logout, name='newauth_logout'),
+    path('login/', login, name='newauth_login'),
+    path('logout/', logout, name='newauth_logout'),
 ]
