@@ -1,6 +1,7 @@
 #:coding=utf-8:
 from urllib.parse import quote
 import mock
+import django
 from django.test import TestCase as DjangoTestCase
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.conf import settings
@@ -45,7 +46,10 @@ class LoginViewsTest(DjangoTestCase):
             'password': 'bad_password',
         })
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'form', None, "Please enter a correct username and password. Note that both fields may be case-sensitive.")
+        if  django.VERSION < (5, 0):
+            self.assertFormError(response, 'form', None, "Please enter a correct username and password. Note that both fields may be case-sensitive.")
+        else:
+            self.assertFormError(response.context['form'], None, "Please enter a correct username and password. Note that both fields may be case-sensitive.")
 
     def test_fail_login_blank_fields(self):
         # blank username
@@ -54,7 +58,10 @@ class LoginViewsTest(DjangoTestCase):
             'password': 'password',
         })
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'form', 'username', u'This field is required.')
+        if  django.VERSION < (5, 0):
+            self.assertFormError(response, 'form', 'username', u'This field is required.')
+        else:
+            self.assertFormError(response.context['form'], 'username', u'This field is required.')
 
         # blank password
         response = self.client.post('/account/login/', {
@@ -62,7 +69,10 @@ class LoginViewsTest(DjangoTestCase):
             'password': '',
         })
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'form', 'password', u'This field is required.')
+        if  django.VERSION < (5, 0):
+            self.assertFormError(response, 'form', 'password', u'This field is required.')
+        else:
+            self.assertFormError(response.context['form'], 'password', u'This field is required.')
 
     def test_bad_redirect_space(self):
         bad_next_url = 'test space url'

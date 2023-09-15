@@ -8,17 +8,14 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from django.conf import settings
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from newauth.api import login as auth_login, logout as auth_logout
 from newauth.forms import BasicAuthForm
 
 
 def _is_safe_url(redirect_to, request):
-    if django.VERSION < (1, 11):
-        return is_safe_url(redirect_to, host=request.get_host())
-    else:
-        return is_safe_url(redirect_to, allowed_hosts={request.get_host()})
+    return url_has_allowed_host_and_scheme(redirect_to, allowed_hosts={request.get_host()})
 
 
 @sensitive_post_parameters()

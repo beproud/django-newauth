@@ -1,4 +1,9 @@
 from importlib import import_module
+from django.http import HttpResponse
+
+
+def get_response_empty(request):
+    return HttpResponse()
 
 
 class AuthTestCaseMixin(object):
@@ -30,8 +35,8 @@ class AuthTestCaseMixin(object):
 
             # Create a fake request to store login details.
             request = HttpRequest()
-            SessionMiddleware().process_request(request)
-            AuthMiddleware().process_request(request)
+            SessionMiddleware(get_response_empty).process_request(request)
+            AuthMiddleware(get_response_empty).process_request(request)
             if self.client.session:
                 request.session = self.client.session
             else:
