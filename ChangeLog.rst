@@ -10,7 +10,7 @@ Release 0.42 (Unreleased)
 =========================
 
 - Support Django-4.2
-- Support Python-3.11
+- Support Python-3.11, 3.12
 - Drop Django-2.2
 - Drop Python-3.6, 3.7
 
