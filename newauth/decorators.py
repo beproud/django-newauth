@@ -1,9 +1,9 @@
 #:coding=utf-8:
 
 from functools import wraps
+from urllib.parse import quote
 
 from django.http import HttpResponseRedirect
-from django.utils.http import urlquote
 
 from newauth.constants import REDIRECT_FIELD_NAME
 from newauth.api import get_backends, get_user_from_request
@@ -23,7 +23,7 @@ def user_passes_test(test_func, login_url=None, redirect_field_name=REDIRECT_FIE
         def _wrapped_view(request, *args, **kwargs):
             if test_func(get_user_from_request(request)):
                 return view_func(request, *args, **kwargs)
-            path = urlquote(request.get_full_path())
+            path = quote(request.get_full_path())
             tup = login_url, redirect_field_name, path
             return HttpResponseRedirect('%s?%s=%s' % tup)
         return _wrapped_view

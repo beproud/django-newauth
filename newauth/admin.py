@@ -12,7 +12,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.admin.helpers import AdminForm
 from django.contrib.admin.utils import flatten_fieldsets
 from django.forms.models import modelform_factory
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.shortcuts import render, get_object_or_404

@@ -1,6 +1,6 @@
 #:coding=utf-8:
 
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.test import TestCase as DjangoTestCase
 from django.conf import settings
 from django.contrib.sessions.middleware import SessionMiddleware
@@ -11,6 +11,10 @@ from newauth.api import authenticate, get_user, login, logout, BasicAnonymousUse
 from newauth.middleware import AuthMiddleware
 from newauth.constants import DEFAULT_SESSION_KEY
 from newauth.signals import user_logged_in, user_logged_out
+
+
+def get_response_empty(request):
+    return HttpResponse()
 
 
 @pytest.mark.django_db
@@ -127,8 +131,8 @@ class LogoutTestCase(DjangoTestCase):
         user = authenticate(user_id=1, _backend_name='testapp3')
         self.assertTrue(user.is_authenticated(), "%s is not authenticated" % user)
 
-        SessionMiddleware().process_request(request)
-        AuthMiddleware().process_request(request)
+        SessionMiddleware(get_response_empty).process_request(request)
+        AuthMiddleware(get_response_empty).process_request(request)
         self.assertTrue(hasattr(request, 'auth_user'), 'Request has no auth_user attribute')
         self.assertTrue(request.auth_user.is_anonymous(), 'User "%s" is authenticated' % request.auth_user)
 
@@ -178,8 +182,8 @@ class LogoutTestCase(DjangoTestCase):
         """
         request = HttpRequest()
 
-        SessionMiddleware().process_request(request)
-        AuthMiddleware().process_request(request)
+        SessionMiddleware(get_response_empty).process_request(request)
+        AuthMiddleware(get_response_empty).process_request(request)
         self.assertTrue(hasattr(request, 'auth_user'), 'Request has no auth_user attribute')
         self.assertTrue(request.auth_user.is_anonymous(), 'User "%s" is authenticated' % request.auth_user)
 

@@ -3,7 +3,7 @@
 from django.dispatch import Signal
 
 
-user_logged_in = Signal(providing_args=['request', 'user'])
+user_logged_in = Signal()
 """
 This is `django.dispatch.Signal` instances.
 This is sent at the end of the `newauth.api.login()` method.
@@ -24,7 +24,7 @@ Arguments sent with this signal:
 """
 
 
-user_logged_out = Signal(providing_args=['request', 'user'])
+user_logged_out = Signal()
 """
 This is `django.dispatch.Signal` instances.
 This is sent at the end of the `newauth.api.logout()` method.

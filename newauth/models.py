@@ -25,7 +25,7 @@ def _get_user_models(model_name=None):
         model_path = backend_data[model_name]['user']
         anon_model_path = backend_data[model_name]['anon_user']
     except IndexError:
-        if model_name is 'default':
+        if model_name == 'default':
             raise ImproperlyConfigured('A "default" user model is not specified. You must specify a "default" user model. Or maybe NEWAUTH_USER_MODELS isn\'t a correctly defined dict?')
         else:
             raise ImproperlyConfigured('Error importing User model class with name "%s". Is NEWAUTH_USER_MODELS a correctly defined dict?' % model_name)
