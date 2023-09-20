@@ -1,0 +1,47 @@
+[project]
+name = "django-newauth"
+dynamic = ['version']
+description = "Authentication for Django done right"
+authors = [
+    { name = "BeProud", email = "project@beproud.jp" },
+]
+readme = "README.rst"
+classifiers=[
+    'Development Status :: 3 - Alpha',
+    'Environment :: Plugins',
+    'Framework :: Django',
+    'Framework :: Django :: 3.2',
+    'Framework :: Django :: 4.2',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: BSD License',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+]
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+dependencies = [
+    "Django>=3.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/beproud/django-newauth/"
+Documentation = "http://django-newauth.rtfd.io/"
+Repository = "https://github.com/beproud/django-newauth.git"
+Changelog = "https://github.com/beproud/django-newauth/blob/master/ChangeLog.rst"
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "newauth.VERSION"}
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
